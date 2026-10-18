@@ -20,6 +20,20 @@ run_case() { # run_case <name> <expected exit> <file content> [expected stderr s
 # Keys are split in two so this file does not trip the scan itself.
 run_case "ticket key blocked"      1 "See ABCD""-13596 for details." "ticket key found"
 run_case "short key blocked"         1 "Change XYZ""-198 went in." "ticket key found"
+run_case "lowercase project key"   1 "see itss""-13596" "ticket key found"
+run_case "one-digit key"           1 "Change ISM""-5 went in." "ticket key found"
+run_case "key with a space"        1 "Tracked in ITSS"" 14287." "ticket key found"
+run_case "ordinary words and numbers" 0 "Week 42, top-10, utf-8, sha-256, ten domain controllers."
 run_case "cert and standard codes" 0 "AZ-104, SC-300, ISO-27001, CVE-2024-3400, RFC-5321 and MS-900."
 run_case "clean post"              0 "Patched the backup platform."
+bin_case() {
+  local t rc; t=$(mktemp -d); mkdir -p "$t/scripts"; cp "$here/check-public.sh" "$t/scripts/"
+  ( cd "$t" && git init -q && printf 'zzz-placeholder\n' > .blocklist.local && printf '.blocklist.local\n' > .gitignore \
+      && printf '\x89PNG\r\n\x1a\n\x00\x00tEXtComment\x00%s\x00\xff' "ABCD""-1234" > img.png \
+      && scripts/check-public.sh >out 2>err ); rc=$?
+  if [[ $rc -eq 1 ]] && grep -q "ticket key found" "$t/err"; then echo "ok   key inside a binary file"; pass=$((pass+1));
+  else echo "FAIL key inside a binary file (exit $rc)"; failed=$((failed+1)); fi
+  rm -rf "$t"
+}
+bin_case
 echo "$pass passed, $failed failed"; exit $(( failed > 0 ))
