@@ -1,0 +1,42 @@
+name: infra
+
+on:
+  push:
+    branches: [main]
+    paths: ['infra/**', '.github/workflows/infra.yml']
+  pull_request:
+    paths: ['infra/**', '.github/workflows/infra.yml']
+
+permissions:
+  id-token: write   # lets the job ask GitHub for the short-lived token Azure trusts
+  contents: read
+
+env:
+  RESOURCE_GROUP: rg-portfolio
+
+jobs:
+  bicep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Show what would change
+        run: >
+          az deployment group what-if
+          --resource-group "$RESOURCE_GROUP"
+          --template-file infra/main.bicep
+          --parameters infra/main.bicepparam
+
+      - name: Deploy
+        if: github.event_name == 'push'
+        run: >
+          az deployment group create
+          --resource-group "$RESOURCE_GROUP"
+          --template-file infra/main.bicep
+          --parameters infra/main.bicepparam

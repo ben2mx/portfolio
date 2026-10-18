@@ -1,0 +1,43 @@
+# Placeholder. Must be an absolute URL or the theme's structured data breaks the build.
+# The site workflow overrides it with the SITE_URL repository variable.
+baseURL = "https://example.org/"
+locale = "en-us"
+title = "Ben Arellano"
+theme = "PaperMod"
+enableRobotsTXT = true
+
+[taxonomies]
+  tag = "tags"
+
+[params]
+  env = "production"
+  author = "Ben Arellano"
+  description = "Senior IT Infrastructure Architect. A weekly log of what I shipped."
+  defaultTheme = "auto"
+  mainSections = ["weekly"]
+  ShowPostNavLinks = true
+  ShowReadingTime = false
+
+  [params.homeInfoParams]
+    Title = "Ben Arellano"
+    Content = "Senior IT Infrastructure Architect. Azure, Microsoft 365, identity and network security. Every week I write down what I shipped and what it changed."
+
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/benjaarellano/"
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/ben2mx"
+
+[[menu.main]]
+  name = "Weekly"
+  url = "/weekly/"
+  weight = 10
+[[menu.main]]
+  name = "About"
+  url = "/about/"
+  weight = 20
+[[menu.main]]
+  name = "How it's built"
+  url = "/how-its-built/"
+  weight = 30

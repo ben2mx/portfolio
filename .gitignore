@@ -1,0 +1,8 @@
+# Hugo build output
+public/
+resources/
+.hugo_build.lock
+
+# Private list of terms that must never appear in a post (names, hostname prefixes).
+# The same list lives in the BLOCKLIST GitHub Actions secret.
+.blocklist.local

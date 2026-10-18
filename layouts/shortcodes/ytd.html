@@ -1,0 +1,9 @@
+{{- /* Running totals across every published weekly post, read from front matter. */ -}}
+{{- $pages := where site.RegularPages "Section" "weekly" -}}
+{{- $closed := 0 -}}
+{{- $handed := 0 -}}
+{{- range $pages -}}
+  {{- $closed = add $closed (.Params.tickets_closed | default 0) -}}
+  {{- $handed = add $handed (.Params.tickets_handed_off | default 0) -}}
+{{- end -}}
+<p><strong>{{ len $pages }}</strong> {{ cond (eq (len $pages) 1) "week" "weeks" }} logged · <strong>{{ $closed }}</strong> tickets closed · <strong>{{ $handed }}</strong> handed to teammates with written steps</p>
