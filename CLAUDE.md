@@ -22,6 +22,10 @@ push, pull request. Never push to `main` directly.
 ## Layout
 
 - `content/weekly/YYYY-wNN.md` — one post per ISO week. Front matter numbers feed the running tally.
+- `content/case-studies/<slug>.md` — one page per flagship project (`/case-study <slug>`).
+- `content/years/YYYY.md` — one year-in-review page per year (`/year-review YYYY`).
+- Source for all three is the private evidence library at `~/projects/work/career/portfolio-evidence/`
+  (read only from here). LinkedIn and Viva Engage drafts go to its `posts/` folder, never into this repo.
 - `infra/` — Bicep for the Azure Static Web App.
 - `.github/workflows/` — `infra.yml` (Bicep via OIDC), `site.yml` (leak check, build, deploy, previews).
 - `.blocklist.local` — private patterns (one regex per line) for the leak check; mirrored in the `BLOCKLIST` secret. The check scans every file git would publish, plus commit messages.

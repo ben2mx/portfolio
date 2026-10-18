@@ -8,13 +8,14 @@ enableRobotsTXT = true
 
 [taxonomies]
   tag = "tags"
+  category = "categories"
 
 [params]
   env = "production"
   author = "Ben Arellano"
-  description = "Senior IT Infrastructure Architect. A weekly log of what I shipped."
+  description = "Senior IT Infrastructure Architect. Case studies, a year-by-year record, and a weekly log of what I shipped."
   defaultTheme = "auto"
-  mainSections = ["weekly"]
+  mainSections = ["weekly", "case-studies"]
   ShowPostNavLinks = true
   ShowReadingTime = false
 
@@ -30,9 +31,21 @@ enableRobotsTXT = true
     url = "https://github.com/ben2mx"
 
 [[menu.main]]
+  name = "Case studies"
+  url = "/case-studies/"
+  weight = 5
+[[menu.main]]
+  name = "Years"
+  url = "/years/"
+  weight = 7
+[[menu.main]]
   name = "Weekly"
   url = "/weekly/"
   weight = 10
+[[menu.main]]
+  name = "Categories"
+  url = "/categories/"
+  weight = 15
 [[menu.main]]
   name = "About"
   url = "/about/"
