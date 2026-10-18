@@ -54,11 +54,19 @@ scan() {
 scan "blocked term found" -iE -f "$terms"
 scan "private IP address found" -E -e "$private_ip"
 
-# Ticket keys (a project prefix, a dash, a number). Certification and standard codes look the same, so they are allowed.
-ticket_key='\b[A-Z]{2,5}-[0-9]{2,6}\b'
-allowed_codes='\b(AZ|SC|MS|PL|AI|DP|MD|ISO|RFC|CVE)-[0-9]+'
-keys=$( { xargs -0 -r -a "$files" grep -noHE "$ticket_key" --; grep -noHE "$ticket_key" -- "$log"; } 2>/dev/null \
-  | grep -vE ":$allowed_codes" || true )
+# Ticket keys: any upper-case prefix, a dash and a number; and our own project prefixes in any case,
+# with a dash, a space or nothing before the number. Certification and standard codes are allowed.
+# -a reads binary files as text (images carry metadata); grep exit 2+ means the scan did not run.
+ticket_key='\b[A-Z]{2,5}-[0-9]{1,6}\b'
+our_key='\b(itss|ism|proj|app)[- ]?[0-9]{1,6}\b'
+allowed_codes=':(AZ|SC|MS|PL|AI|DP|MD|ISO|RFC|CVE|COVID)-[0-9]+'
+keys_scan() {
+  local rc=0 out
+  out=$( { xargs -0 -r -a "$files" grep -naoHE "$@" --; grep -naoHE "$@" -- "$log"; } 2>"$work/keys-err" ) || rc=$?
+  if [[ -s "$work/keys-err" ]] || (( rc > 1 && rc != 123 )); then echo "check-public: the ticket key scan could not run." >&2; fail=1; fi
+  grep -vE "$allowed_codes" <<<"$out" || true
+}
+keys=$( { keys_scan -e "$ticket_key"; keys_scan -i -e "$our_key"; } | grep -v '^$' | sort -u || true )
 if [[ -n "$keys" ]]; then
   echo "check-public: ticket key found:" >&2
   sed "s|^$log|commit-messages|" <<<"$keys" | show >&2
