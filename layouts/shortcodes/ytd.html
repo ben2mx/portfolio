@@ -6,4 +6,4 @@
   {{- $closed = add $closed (.Params.tickets_closed | default 0) -}}
   {{- $handed = add $handed (.Params.tickets_handed_off | default 0) -}}
 {{- end -}}
-<p><strong>{{ len $pages }}</strong> {{ cond (eq (len $pages) 1) "week" "weeks" }} logged · <strong>{{ $closed }}</strong> tickets closed · <strong>{{ $handed }}</strong> handed to teammates with written steps</p>
+<p><strong>{{ len $pages }}</strong> {{ cond (eq (len $pages) 1) "week" "weeks" }} logged · <strong>{{ $closed }}</strong> tickets closed · <strong>{{ $handed }}</strong> opened for teammates</p>
