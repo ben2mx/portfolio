@@ -20,10 +20,19 @@ env:
 jobs:
   bicep:
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      # Use the Bicep compiler that ships on the runner. Without this, the Azure CLI
+      # downloads the newest compiler mid-run, inside the job that holds the Azure identity.
+      - name: Use the preinstalled Bicep
+        run: |
+          az config set bicep.use_binary_from_path=true
+          bicep --version
 
       - uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
         with:
