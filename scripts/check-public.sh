@@ -6,6 +6,7 @@
 # one extended regular expression per line, matched case-insensitively, # for comments.
 #
 # Scans every file git tracks or would track (not just posts), plus commit messages.
+# Binary files are searched too, since images carry text metadata.
 # Anything that stops the scan from running counts as a failure.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -29,14 +30,17 @@ fi
 
 # The theme is third-party code; the blocklist is ignored by git so it is never listed.
 git ls-files -z --cached --others --exclude-standard -- . ':!themes' > "$files"
-git log --all --format='%an <%ae>%n%B' > "$log" 2>/dev/null || true   # no commits yet is fine
+: > "$log"
+if git rev-parse --verify -q HEAD >/dev/null; then   # no commits yet is fine
+  git log --all --format='%an <%ae>%n%B' > "$log"
+fi
 
 private_ip='\b(10\.[0-9]{1,3}|192\.168|172\.(1[6-9]|2[0-9]|3[01]))\.[0-9]{1,3}\.[0-9]{1,3}\b'
 
 # scan <label> <grep options...>: grep exits 0 on a hit, 1 on none, 2+ on error.
 scan() {
   local label=$1 hits rc=0; shift
-  hits=$( { xargs -0 -r -a "$files" grep -nIH "$@" --; grep -nH "$@" -- "$log"; } 2>&1 ) || rc=$?
+  hits=$( { xargs -0 -r -a "$files" grep -naH "$@" --; grep -naH "$@" -- "$log"; } 2>&1 ) || rc=$?
   if [[ -n "$hits" ]]; then
     echo "check-public: $label:" >&2
     sed "s|^$log|commit-messages|" <<<"$hits" | show >&2

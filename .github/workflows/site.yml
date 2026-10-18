@@ -10,17 +10,20 @@ permissions:
   contents: read
   pull-requests: write   # the deploy step comments the preview URL on the pull request
 
+# Actions are pinned to an exact commit so a re-tagged release cannot change what runs.
 env:
   HUGO_VERSION: 0.165.0
+  HUGO_SHA256: b4fab4477743c0f1fcfe85072a71156d78f97e4724f0d8bb3b1b1ff2f53ce3ac
 
 jobs:
   build-deploy:
     if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           submodules: true
+          fetch-depth: 0   # full history, so the leak check sees every commit message
 
       - name: Leak check
         env:
@@ -30,6 +33,7 @@ jobs:
       - name: Install Hugo
         run: |
           curl -fsSL -o /tmp/hugo.deb "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          echo "${HUGO_SHA256}  /tmp/hugo.deb" | sha256sum --check
           sudo dpkg -i /tmp/hugo.deb
 
       - name: Build
@@ -38,7 +42,7 @@ jobs:
         run: hugo --gc --minify --baseURL "$SITE_URL"
 
       - name: Deploy
-        uses: Azure/static-web-apps-deploy@v1
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +54,7 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-      - uses: Azure/static-web-apps-deploy@v1
+      - uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: close

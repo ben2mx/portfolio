@@ -4,11 +4,12 @@ on:
   push:
     branches: [main]
     paths: ['infra/**', '.github/workflows/infra.yml']
-  workflow_dispatch:
 
 # Not run on pull requests: the Azure identity can change resources, so it is only
 # handed to code that has already been reviewed and merged. Azure trusts this job
 # through the "production" environment, and nothing else in the repo can use it.
+# Required GitHub settings (they cannot live in this file): main is protected, and the
+# production environment only allows deployments from main.
 permissions:
   id-token: write   # lets the job ask GitHub for the short-lived token Azure trusts
   contents: read
@@ -18,12 +19,13 @@ env:
 
 jobs:
   bicep:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: azure/login@v2
+      - uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
