@@ -4,9 +4,11 @@ on:
   push:
     branches: [main]
     paths: ['infra/**', '.github/workflows/infra.yml']
-  pull_request:
-    paths: ['infra/**', '.github/workflows/infra.yml']
+  workflow_dispatch:
 
+# Not run on pull requests: the Azure identity can change resources, so it is only
+# handed to code that has already been reviewed and merged. Azure trusts this job
+# through the "production" environment, and nothing else in the repo can use it.
 permissions:
   id-token: write   # lets the job ask GitHub for the short-lived token Azure trusts
   contents: read
@@ -17,6 +19,7 @@ env:
 jobs:
   bicep:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +37,6 @@ jobs:
           --parameters infra/main.bicepparam
 
       - name: Deploy
-        if: github.event_name == 'push'
         run: >
           az deployment group create
           --resource-group "$RESOURCE_GROUP"

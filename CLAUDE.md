@@ -24,4 +24,4 @@ push, pull request. Never push to `main` directly.
 - `content/weekly/YYYY-wNN.md` — one post per ISO week. Front matter numbers feed the running tally.
 - `infra/` — Bicep for the Azure Static Web App.
 - `.github/workflows/` — `infra.yml` (Bicep via OIDC), `site.yml` (leak check, build, deploy, previews).
-- `.blocklist.local` — private term list for the leak check; mirrored in the `BLOCKLIST` secret.
+- `.blocklist.local` — private patterns (one regex per line) for the leak check; mirrored in the `BLOCKLIST` secret. The check scans every file git would publish, plus commit messages.
