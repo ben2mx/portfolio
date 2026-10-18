@@ -54,5 +54,16 @@ scan() {
 scan "blocked term found" -iE -f "$terms"
 scan "private IP address found" -E -e "$private_ip"
 
+# Ticket keys (a project prefix, a dash, a number). Certification and standard codes look the same, so they are allowed.
+ticket_key='\b[A-Z]{2,5}-[0-9]{2,6}\b'
+allowed_codes='\b(AZ|SC|MS|PL|AI|DP|MD|ISO|RFC|CVE)-[0-9]+'
+keys=$( { xargs -0 -r -a "$files" grep -noHE "$ticket_key" --; grep -noHE "$ticket_key" -- "$log"; } 2>/dev/null \
+  | grep -vE ":$allowed_codes" || true )
+if [[ -n "$keys" ]]; then
+  echo "check-public: ticket key found:" >&2
+  sed "s|^$log|commit-messages|" <<<"$keys" | show >&2
+  fail=1
+fi
+
 if (( fail == 0 )); then echo "check-public: clean"; fi
 exit $fail
