@@ -19,9 +19,9 @@ I'm a Senior IT Infrastructure Architect at Econolite.
 - Built core infrastructure from the ground up: Cato SD-WAN across every site, Rubrik enterprise backup, and a Nutanix hyperconverged migration, each with vendor professional services.
 - Took Microsoft Secure Score from below the industry average to about 21 points above peers, through the Microsoft Defender stack, Conditional Access and Entra ID, and an audit-first Attack Surface Reduction rollout across 1,500+ endpoints.
 - Architected backup and DR: a tiered SLA model for 225+ VMs and continuous replication to an off-site DR provider.
-- Strengthened identity: a three-tier privileged-access model, cleanup of 80+ stale Entra ID app identities, and Group Policy moved into Intune.
-- Led platform moves: Mimecast to Microsoft Defender for Office 365, 8x8 to Microsoft Teams Phone, on-prem SharePoint to SharePoint Online.
-- Write Python and PowerShell against Microsoft Graph, Rubrik, vCenter, Palo Alto, and NetBox APIs, including an internal platform the team queries in plain language.
+- Strengthened identity: a three-tier privileged-access model, cleanup of 80+ stale Entra ID app identities, and moving Group Policy into Intune.
+- Led platform moves: Mimecast to Microsoft Defender for Office 365, 8x8 to Microsoft Teams Phone, and began moving on-prem SharePoint to SharePoint Online.
+- Write Python and PowerShell against Microsoft Graph, Rubrik, vCenter, and NetBox APIs, including an internal platform the team queries in plain language.
 
 ## How I work
 
