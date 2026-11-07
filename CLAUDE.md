@@ -6,6 +6,8 @@ Public repo. Everything committed here is readable by anyone, including branches
 
 - Never: coworker or executive names, hostnames, IP addresses, ticket keys, internal site names,
   consultant or service-partner names, dollar figures, OS versions, internal policy names.
+- No ticket counts, ticket tables or ticket-system numbers of any kind (Ben, 2026-10-17). Posts describe
+  outcomes only; the counts stay in the private evidence library.
 - A security item is only mentioned once it is fully fixed. Describe the outcome, not the hole.
   If part of it is still open, hold the whole item for a later week.
 - Credit shared work. Nothing that reflects badly on the employer.
