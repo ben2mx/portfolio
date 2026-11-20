@@ -11,8 +11,10 @@ Draft the weekly post for the ISO week containing today (or the week given in $A
    each `###` heading; month sections are not in order).
 3. Write `content/weekly/YYYY-wNN.md` following the newest existing post: same front matter keys (no ticket
    counts, no numbers table), "What shipped", "What it means" (company, IT team).
-   Plain language a recruiter can follow. `draft: true`. Tags and `categories` from: networking, azure,
-   security, identity, backup-dr, monitoring, endpoint, jira-process, ai-automation.
+   Plain language a recruiter can follow. `draft: true`. `categories` are products: slugs from
+   `data/categories.yaml` (one per product the week touched); create `content/categories/<slug>/_index.md`
+   with the display name the first time a slug is used. `tags` are areas: networking, azure, security,
+   identity, backup-dr, monitoring, endpoint, jira-process, ai-automation.
 4. Apply every rule in `CLAUDE.md`. Any item under "Security items" in the evidence file stays out unless Ben
    has marked it yes. List for Ben, in chat only, what was held back and why.
 5. Every second week (even ISO week numbers), also draft into `~/projects/work/career/portfolio-evidence/posts/`
